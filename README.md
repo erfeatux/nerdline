@@ -124,3 +124,4 @@ color_fg=0:170:0
 sign_err=󱎘
 sign_ok=󰸞
 ```
+⚠️ **Note:** use command `nerdline update` to reload config
