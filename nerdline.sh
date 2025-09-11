@@ -54,7 +54,7 @@ function __nerdline_tmp_load_configs()
 	then
 		if [[ -z ${__nerdline_segments_ssh} ]]
 		then
-			__nerdline_segments='user hostname python flatpak hist git pwd jobs retcode'
+			__nerdline_segments='user hostname python hist git pwd jobs retcode'
 		else
 			__nerdline_segments="${__nerdline_segments_ssh}"
 		fi
