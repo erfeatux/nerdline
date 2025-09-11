@@ -88,7 +88,7 @@ then #Start ssh connection #######################################
 	__nerdline_tmp_values=()
 	for __nerdline_tmp_valname in "${__nerdline_tmp_valnames[@]}"
 	do
-		eval __nerdline_tmp_values+='( "'"$__nerdline_tmp_valname"'='"${!__nerdline_tmp_valname}"'" )'
+		eval __nerdline_tmp_values+='( "'"$__nerdline_tmp_valname"'=\"${!__nerdline_tmp_valname}\"" )'
 	done
 	__nerdline_tmp_values+=( "__nerdline_modules_ssh=\"${__nerdline_modules}\"" )
 	__nerdline_tmp_values+=( "__nerdline_segments_ssh=\"${__nerdline_segments}\"" )

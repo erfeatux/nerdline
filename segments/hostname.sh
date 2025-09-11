@@ -21,7 +21,7 @@ source "$__nerdline_pfx/lib/functions.sh" colors
 #Definition of undefined colors and vars
 if [[ -z $__nerdline_hostname_color_fg ]]
 then
-	__nerdline_hostname_color_fg='#00ff00'
+	__nerdline_hostname_color_fg='#999'
 fi
 if [[ -z $__nerdline_hostname_color_bg ]]
 then
@@ -33,7 +33,7 @@ then
 fi
 if [[ -z $__nerdline_hostname_color_sign_ssh ]]
 then
-	__nerdline_hostname_color_sign_ssh="$__nerdline_hostname_color_sign"
+	__nerdline_hostname_color_sign_ssh="#0f0"
 fi
 if [[ -z $__nerdline_hostname_showlocal ]]
 then
