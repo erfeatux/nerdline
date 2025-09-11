@@ -87,11 +87,11 @@ then #Sourcing this file #########################################
 		if [[ -n $VIRTUAL_ENV_PROMPT ]]
 		then
 			__nerdline_python="${_nl_bg}${__nerdline_python_color_bg}${_nl_end}${_nl_fg}${__nerdline_python_color_sign}${_nl_end}${__nerdline_python_sign}"
-			__nerdline_python+="${_nl_fg}${__nerdline_python_color_fg}${_nl_end}$(python -V | sed 's/^\w*\s*//')${VIRTUAL_ENV_PROMPT}"
+			__nerdline_python+="${_nl_fg}${__nerdline_python_color_fg}${_nl_end}$(python -V | sed 's/^\w*\s*//') ${VIRTUAL_ENV_PROMPT}"
 		elif [[ -n $CONDA_PROMPT_MODIFIER ]]
 		then
 			__nerdline_python="${_nl_bg}${__nerdline_python_color_bg}${_nl_end}${_nl_fg}${__nerdline_python_color_sign_conda}${_nl_end}${__nerdline_python_sign_conda}"
-			__nerdline_python+="${_nl_fg}${__nerdline_python_color_fg}${_nl_end}$(python -V | sed 's/^\w*\s*//')${CONDA_PROMPT_MODIFIER}"
+			__nerdline_python+="${_nl_fg}${__nerdline_python_color_fg}${_nl_end}$(python -V | sed 's/^\w*\s*//') ${CONDA_PROMPT_MODIFIER}"
 		else
 			unset __nerdline_python
 		fi
