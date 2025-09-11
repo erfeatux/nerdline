@@ -155,6 +155,16 @@ config)
 			#else try parse entry
 			__nerdline_tmp_cfg_key="$(echo "${__nerdline_tmp_line%%=*}" | sed -e 's/\(^\s*\|\s*$\)//g')"
 			__nerdline_tmp_cfg_val="$(echo "${__nerdline_tmp_line#*=}" | sed -e 's/\(^\s*\|\s*$\)//g')"
+			if [[ ${#__nerdline_tmp_cfg_val} -ge 2 ]];
+			then
+				__nerdline__q1="${__nerdline_tmp_cfg_val:0:1}"
+				__nerdline__q2="${__nerdline_tmp_cfg_val: -1}"
+				if [[ "$__nerdline__q1" == "$__nerdline__q2" && ( "$__nerdline__q1" == '"' || "$__nerdline__q1" == "'" ) ]]
+				then
+					__nerdline_tmp_cfg_val="${__nerdline_tmp_cfg_val:1:-1}"
+				fi
+			fi
+
 			if [[ -z $__nerdline_tmp_cfg_key ]] || [[ -z $__nerdline_tmp_cfg_val ]] || [[ ! $__nerdline_tmp_line =~ = ]]
 			then
 				error 11 "Invalid entry '$__nerdline_tmp_line' in '$__nerdline_tmp_cfg_section' section";return $?
