@@ -1,5 +1,6 @@
 # nerdline
 A simple powerline style prompt generator for Bash, written 100% in pure Bash.
+![screenshot](screenshot.avif)
 
 ## ✨ Features
 
@@ -39,6 +40,8 @@ After install to run immediately
 ~/.local/share/nerdline/nerdline.sh test && source ~/.local/share/nerdline/nerdline.sh
 ```
 ## 🔧 Configuration
+
+⚠️ **Note:** to properly display the special symbols from the default config, your terminal must use a font from [Nerd Fonts](https://www.nerdfonts.com/).
 
 The configuration file can be placed in one of the following locations (checked in order):
 
