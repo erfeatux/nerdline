@@ -63,7 +63,7 @@ then #Sourcing this file #########################################
 
 	function __nerdline_hist_update()
 	{ #This function will be called on every update of the prompt
-		if [[ -z $HISTFILE ]] || [[ $HIStFILE == /dev/null ]]
+		if [[ -z $HISTFILE ]] || [[ $HISTFILE == /dev/null ]]
 		then
 			__nerdline_hist="${_nl_bg}${__nerdline_hist_color_bg}${_nl_end}${_nl_fg}${__nerdline_hist_color_fg}${_nl_end}${__nerdline_hist_sign}"
 		else
