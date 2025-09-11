@@ -37,7 +37,7 @@ fi
 ```
 After install to run immediately
 ```bash
-source ~/.local/share/nerdline/nerdline.sh test && source ~/.local/share/nerdline/nerdline.sh
+~/.local/share/nerdline/nerdline.sh test && source ~/.local/share/nerdline/nerdline.sh
 ```
 ## 🔧 Configuration
 
