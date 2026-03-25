@@ -71,6 +71,7 @@ then #Sourcing this file #########################################
 	{ #This function will be called on every update of the prompt
 		local stopped=0
 		local running=0
+		local line
 		while read -r line
 		do
 			if [[ $line =~ Stopped ]];then	((stopped+=1));fi

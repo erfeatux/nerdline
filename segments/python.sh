@@ -84,6 +84,12 @@ then #Sourcing this file #########################################
 
 	function __nerdline_python_update()
 	{ #This function will be called on every update of the prompt
+		if ! command -v python &>/dev/null
+		then
+			unset __nerdline_python
+			return
+		fi
+
 		if [[ -n $VIRTUAL_ENV_PROMPT ]]
 		then
 			__nerdline_python="${_nl_bg}${__nerdline_python_color_bg}${_nl_end}${_nl_fg}${__nerdline_python_color_sign}${_nl_end}${__nerdline_python_sign}"

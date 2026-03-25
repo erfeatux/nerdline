@@ -99,6 +99,12 @@ then #Sourcing this file #########################################
 	__nerdline_tmp_parseColors "${!__nerdline_hostname_color_@}"
 	export "${!__nerdline_hostname_@}"
 
+	if ! command -v hostname &>/dev/null
+	then
+		__nerdline_hostname=""
+		return
+	fi
+
 	if [[ -n $SSH_CLIENT ]]
 	then
 		__nerdline_tmp_hostname_sign="$__nerdline_hostname_sign_ssh"
@@ -109,7 +115,12 @@ then #Sourcing this file #########################################
 	fi
 	if [[ ${__nerdline_hostname_showip,,} =~ ^(true|yes|1)$ ]]
 	then
-		__nerdline_tmp_hostname="$(hostname -I | awk '{print $1}')"
+		if command -v hostname &>/dev/null && hostname -I &>/dev/null
+		then
+			__nerdline_tmp_hostname="$(hostname -I | awk '{print $1}')"
+		else
+			__nerdline_tmp_hostname=""
+		fi
 	else
 		__nerdline_tmp_hostname="$(hostname)"
 	fi

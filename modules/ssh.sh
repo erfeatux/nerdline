@@ -80,6 +80,12 @@ then #Start ssh connection #######################################
 		error 16 'Unknown destination'
 	fi
 
+	# Validate segment names to prevent injection
+	if [[ ! ${__nerdline_segments} =~ ^[a-zA-Z0-9_[:space:]]+$ ]]
+	then
+		error 17 'Invalid segment names'
+	fi
+
 	__nerdline_tmp_valnames=()
 	for __nerdline_tmp_segment in ${__nerdline_segments}
 	do
@@ -117,6 +123,10 @@ then #Start ssh connection #######################################
 					__nerdline_pfx=\"\$HOME/.local/share/nerdline\"
 				fi
 
+				if [[ \$__nerdline_pfx =~ \.\. ]] || [[ \$__nerdline_pfx =~ ^/proc ]] || [[ \$__nerdline_pfx =~ ^/sys ]]
+				then
+					exit 10
+				fi
 				if [[ ! -d \"\$__nerdline_pfx\" ]]
 				then
 					mkdir -p \"\$__nerdline_pfx\" || exit 1

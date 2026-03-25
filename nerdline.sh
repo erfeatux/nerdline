@@ -240,9 +240,9 @@ else #############################################################
 
 					if [[ "$__nerdline_tests_output" =~ Tests:\ ([0-9]+),\ Passed:\ ([0-9]+),\ Failed:\ ([0-9]+) ]]
 					then
-						__nerdline_tests_total=$((__nerdline_tests_total + ${BASH_REMATCH[1]}))
-						__nerdline_tests_passed=$((__nerdline_tests_passed + ${BASH_REMATCH[2]}))
-						__nerdline_tests_failed=$((__nerdline_tests_failed + ${BASH_REMATCH[3]}))
+						__nerdline_tests_total=$((__nerdline_tests_total + BASH_REMATCH[1]))
+						__nerdline_tests_passed=$((__nerdline_tests_passed + BASH_REMATCH[2]))
+						__nerdline_tests_failed=$((__nerdline_tests_failed + BASH_REMATCH[3]))
 					fi
 				done < <(find "$__nerdline_tests_dir" -maxdepth 1 -name '*.sh' -print0)
 			fi

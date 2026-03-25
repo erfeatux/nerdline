@@ -154,6 +154,7 @@ then #Sourcing this file #########################################
 		local mod=0
 		local rm=0
 		local rn=0
+		local line action
 		while read -r line
 		do
 			if [[ -z $branch ]] && [[ $line =~ ^## ]]

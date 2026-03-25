@@ -83,10 +83,11 @@ function nerdline_test_assert_exit_code()
 {
 	local description="$1"
 	local expected_code="$2"
+	local cmd_status=$?
 
 	((__nerdline_test_total++))
 
-	if [[ $? -eq $expected_code ]]; then
+	if [[ $cmd_status -eq $expected_code ]]; then
 		((__nerdline_test_passed++))
 		echo -e "${__nerdline_test_clr_pass}✓${__nerdline_test_clr_reset} $description"
 		return 0
@@ -94,7 +95,7 @@ function nerdline_test_assert_exit_code()
 		((__nerdline_test_failed++))
 		echo -e "${__nerdline_test_clr_fail}✗${__nerdline_test_clr_reset} $description"
 		echo "  Expected exit code: $expected_code"
-		echo "  Actual exit code:  $?"
+		echo "  Actual exit code:  $cmd_status"
 		return 1
 	fi
 }
