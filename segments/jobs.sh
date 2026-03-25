@@ -19,6 +19,10 @@
 source "$__nerdline_pfx/lib/functions.sh" colors
 
 #Definition of undefined colors and vars
+if [[ -z $__nerdline_jobs_color_fg ]]
+then
+	__nerdline_jobs_color_fg='#999'
+fi
 if [[ -z $__nerdline_jobs_color_bg ]]
 then
 	__nerdline_jobs_color_bg='#222'
@@ -46,6 +50,10 @@ if [[ $1 == test ]] ##############################################
 then #Test (use it before sourcing file) #########################
 	source "$__nerdline_pfx/lib/functions.sh" error
 
+	if ! __nerdline_tmp_isColor "$__nerdline_jobs_color_fg"
+	then
+		error 1 "Invalid foreground color '$__nerdline_jobs_color_fg'"
+	fi
 	if ! __nerdline_tmp_isColor "$__nerdline_jobs_color_bg"
 	then
 		error 2 "Invalid background color '$__nerdline_jobs_color_bg'"

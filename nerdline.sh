@@ -206,7 +206,63 @@ then #Sourcing this file #########################################
 ##################################################################
 else #############################################################
 	__nerdline_pfx=$(dirname "$(readlink -f "$0")")
-	if [[ -n $1 ]] && [[ $__nerdline_modules =~ (^|\ )$1($|\ ) ]]
+
+	if [[ $1 == tests ]]
+	then #Run all tests ###############################################
+		# shellcheck disable=SC1091
+		source "$__nerdline_pfx/lib/functions.sh" error
+
+		__nerdline_tests_clr_pass='\033[0;32m'
+		__nerdline_tests_clr_fail='\033[0;31m'
+		__nerdline_tests_clr_reset='\033[0m'
+
+		__nerdline_tests_total=0
+		__nerdline_tests_passed=0
+		__nerdline_tests_failed=0
+
+		echo "Running all tests..."
+		echo ""
+
+		__nerdline_tests_dirs=("$__nerdline_pfx/tests/unit" "$__nerdline_pfx/tests/segments" "$__nerdline_pfx/tests/modules" "$__nerdline_pfx/tests/integration")
+
+		for __nerdline_tests_dir in "${__nerdline_tests_dirs[@]}"
+		do
+			if [[ -d "$__nerdline_tests_dir" ]]
+			then
+				while IFS= read -r -d '' __nerdline_tests_file
+				do
+					[[ -x "$__nerdline_tests_file" ]] && continue
+					__nerdline_tests_name="$(basename "$__nerdline_tests_file" .sh)"
+					echo "=== $__nerdline_tests_name ==="
+
+					__nerdline_tests_output="$(TERMSHELL=bash __nerdline_pfx="$__nerdline_pfx" bash "$__nerdline_tests_file" 2>&1)"
+					echo "$__nerdline_tests_output"
+
+					if [[ "$__nerdline_tests_output" =~ Tests:\ ([0-9]+),\ Passed:\ ([0-9]+),\ Failed:\ ([0-9]+) ]]
+					then
+						__nerdline_tests_total=$((__nerdline_tests_total + ${BASH_REMATCH[1]}))
+						__nerdline_tests_passed=$((__nerdline_tests_passed + ${BASH_REMATCH[2]}))
+						__nerdline_tests_failed=$((__nerdline_tests_failed + ${BASH_REMATCH[3]}))
+					fi
+				done < <(find "$__nerdline_tests_dir" -maxdepth 1 -name '*.sh' -print0)
+			fi
+		done
+
+		echo ""
+		echo "================================"
+		echo "Total: $__nerdline_tests_total, Passed: $__nerdline_tests_passed, Failed: $__nerdline_tests_failed"
+		echo "================================"
+
+		if [[ $__nerdline_tests_failed -gt 0 ]]
+		then
+			echo -e "${__nerdline_tests_clr_fail}FAILED${__nerdline_tests_clr_reset}"
+			exit 1
+		else
+			echo -e "${__nerdline_tests_clr_pass}PASSED${__nerdline_tests_clr_reset}"
+			exit 0
+		fi
+
+	elif [[ -n $1 ]] && [[ $__nerdline_modules =~ (^|\ )$1($|\ ) ]]
 	then
 		__nerdline_tmp_args=( "${@}" )
 		__nerdline_tmp_args=( "${__nerdline_tmp_args[@]:1}" )
@@ -218,6 +274,7 @@ else #############################################################
 	echo -e '\e[37;40mactions:\e[0m'
 	echo -e '\e[36;40m\tupdate\t\tRestart nerdline, -f/--force option reloads its config\e[0m'
 	echo -e '\e[36;40m\ttest\t\tConfiguration and integrity check\e[0m'
+	echo -e '\e[36;40m\ttests\t\tRun all unit, segment, module and integration tests\e[0m'
 	for __nerdline_tmp_modname in ${__nerdline_modules}
 	do
 		__nerdline_tmp_modname_help="__nerdline_mds_${__nerdline_tmp_modname}_help"
