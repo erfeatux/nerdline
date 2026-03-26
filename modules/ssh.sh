@@ -113,7 +113,9 @@ then #Start ssh connection #######################################
 			done
 			for __nerdline_tmp_valname in "${!__nerdline_tarball@}"
 			do
-				echo "export '$__nerdline_tmp_valname=${!__nerdline_tmp_valname}'"
+				printf -v __nerdline_tmp_val "%s" "$__nerdline_tmp_valname"
+				printf -v __nerdline_tmp_val_val "%s" "${!__nerdline_tmp_valname}"
+				echo "export ${__nerdline_tmp_val}=${__nerdline_tmp_val_val@Q}"
 			done
 			echo "export COLORTERM=truecolor
 				if [[ -n \$XDG_DATA_HOME ]]
@@ -123,7 +125,7 @@ then #Start ssh connection #######################################
 					__nerdline_pfx=\"\$HOME/.local/share/nerdline\"
 				fi
 
-				if [[ \$__nerdline_pfx =~ \.\. ]] || [[ \$__nerdline_pfx =~ ^/proc ]] || [[ \$__nerdline_pfx =~ ^/sys ]]
+				if [[ \"\$__nerdline_pfx\" == *..* ]] || [[ \"\$__nerdline_pfx\" == /proc/* ]] || [[ \"\$__nerdline_pfx\" == /sys/* ]]
 				then
 					exit 10
 				fi

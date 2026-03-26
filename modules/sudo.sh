@@ -30,12 +30,12 @@ then #Test (use it before sourcing file) #########################
 elif [[ $1 == run ]] #############################################
 then #Run sudo command ###########################################
 	source "$__nerdline_pfx/lib/functions.sh" error
-	__nerdline_tmp_sudo_bin="$(which sudo)"
+	__nerdline_tmp_sudo_bin="$(command -v sudo)"
 	"${__nerdline_tmp_sudo_bin}" -V > /dev/null 2>&1 || error 21 "Can't find sudo binary"
 	__nerdline_tmp_sudo_args=( "$@" )
 	__nerdline_tmp_sudo_args=( "${__nerdline_tmp_sudo_args[@]:1}" )
 
-	if [[ ${#__nerdline_tmp_sudo_args} -eq 2 ]] && [[ ${__nerdline_tmp_sudo_args[0]} == su ]]
+	if [[ ${#__nerdline_tmp_sudo_args} -ge 1 ]] && [[ "${__nerdline_tmp_sudo_args[0]}" == su ]]
 	then
 		__nerdline_tmp_sudo_vals=
 		for __nerdline_tmp_sudo_valname in "${!__nerdline_@}"

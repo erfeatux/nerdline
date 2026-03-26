@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# shellcheck disable=SC1091,SC2001,SC2154
+# shellcheck disable=SC1091,SC2001,SC2016,SC2097,SC2098,SC2154
 
 __nerdline_pfx="/home/erfea/Projects/nerdline"
 
@@ -28,7 +28,7 @@ function test_nerdline_test_command()
 	fi
 
 	local output
-	output="$(TERM=dumb __nerdline_pfx="$__nerdline_pfx" bash "$__nerdline_pfx/nerdline.sh" test 2>&1; echo "exit:$?")"
+	output="$(TERM=dumb __nerdline_pfx="$__nerdline_pfx" bash -c 'source "$__nerdline_pfx/nerdline.sh" test' 2>&1; echo "exit:$?")"
 
 	local exit_code
 	exit_code="$(echo "$output" | tail -1 | cut -d: -f2)"
@@ -84,15 +84,15 @@ function test_nerdline_structure()
 	local has_sourcing_section=0
 	local has_cli_section=0
 
-	if [[ "$nerdline_content" == *'if [[ $1 == test ]]'* ]]; then
+	if [[ "$nerdline_content" == *"if [[ \$1 == test ]]"* ]]; then
 		has_test_section=1
 	fi
 
-	if [[ "$nerdline_content" == *'elif [[ ${BASH_SOURCE[0]} != "$0" ]]'* ]]; then
+	if [[ "$nerdline_content" == *"elif [[ \${BASH_SOURCE[0]} != \"\$0\" ]]"* ]]; then
 		has_sourcing_section=1
 	fi
 
-	if [[ "$nerdline_content" == *'else'* ]]; then
+	if [[ "$nerdline_content" == *"else"* ]]; then
 		has_cli_section=1
 	fi
 

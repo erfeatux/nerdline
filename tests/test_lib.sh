@@ -43,14 +43,14 @@ function nerdline_test_assert()
 	local expected="$2"
 	local actual="$3"
 
-	((__nerdline_test_total++))
+	__nerdline_test_total=$((__nerdline_test_total + 1))
 
 	if [[ "$expected" == "$actual" ]]; then
-		((__nerdline_test_passed++))
+		__nerdline_test_passed=$((__nerdline_test_passed + 1))
 		echo -e "${__nerdline_test_clr_pass}✓${__nerdline_test_clr_reset} $description"
 		return 0
 	else
-		((__nerdline_test_failed++))
+		__nerdline_test_failed=$((__nerdline_test_failed + 1))
 		echo -e "${__nerdline_test_clr_fail}✗${__nerdline_test_clr_reset} $description"
 		echo "  Expected: '$expected'"
 		echo "  Actual:   '$actual'"
@@ -64,14 +64,14 @@ function nerdline_test_assert_ne()
 	local not_expected="$2"
 	local actual="$3"
 
-	((__nerdline_test_total++))
+	__nerdline_test_total=$((__nerdline_test_total + 1))
 
 	if [[ "$not_expected" != "$actual" ]]; then
-		((__nerdline_test_passed++))
+		__nerdline_test_passed=$((__nerdline_test_passed + 1))
 		echo -e "${__nerdline_test_clr_pass}✓${__nerdline_test_clr_reset} $description"
 		return 0
 	else
-		((__nerdline_test_failed++))
+		__nerdline_test_failed=$((__nerdline_test_failed + 1))
 		echo -e "${__nerdline_test_clr_fail}✗${__nerdline_test_clr_reset} $description"
 		echo "  Not expected: '$not_expected'"
 		echo "  Actual:        '$actual'"
@@ -85,14 +85,14 @@ function nerdline_test_assert_exit_code()
 	local expected_code="$2"
 	local cmd_status=$?
 
-	((__nerdline_test_total++))
+	__nerdline_test_total=$((__nerdline_test_total + 1))
 
 	if [[ $cmd_status -eq $expected_code ]]; then
-		((__nerdline_test_passed++))
+		__nerdline_test_passed=$((__nerdline_test_passed + 1))
 		echo -e "${__nerdline_test_clr_pass}✓${__nerdline_test_clr_reset} $description"
 		return 0
 	else
-		((__nerdline_test_failed++))
+		__nerdline_test_failed=$((__nerdline_test_failed + 1))
 		echo -e "${__nerdline_test_clr_fail}✗${__nerdline_test_clr_reset} $description"
 		echo "  Expected exit code: $expected_code"
 		echo "  Actual exit code:  $cmd_status"

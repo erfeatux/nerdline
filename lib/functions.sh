@@ -73,12 +73,13 @@ error)
 colors)
 	function __nerdline_tmp_isColor()
 	{ #Check if the first argument is a color
-		__nerdline_tmp_isColor_val="${1//,/:}"
+		local __nerdline_tmp_isColor_val="${1//,/:}"
 		if [[ $__nerdline_tmp_isColor_val =~ ^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3}|[A-Fa-f0-9]{8})$ ]]
 		then
 			return 0
 		elif [[ $__nerdline_tmp_isColor_val =~ ^([0-9]{1,3}:){2}[0-9]{1,3}$ ]]
 		then
+			local __nerdline_tmp_isColor_values
 			IFS=':' read -ra __nerdline_tmp_isColor_values <<< "$__nerdline_tmp_isColor_val"
 			if [[ ${__nerdline_tmp_isColor_values[0]} -lt 256 ]] && [[ ${__nerdline_tmp_isColor_values[1]} -lt 256 ]] && [[ ${__nerdline_tmp_isColor_values[2]} -lt 256 ]]
 			then
@@ -100,12 +101,12 @@ colors)
 			fi
 	
 			__nerdline_tmp_parseColors_color="${!__nerdline_tmp_parseColors_valname}"
-			if [[ $__nerdline_tmp_parseColors_color =~ ^#[A-Fa-f0-9]{3}$ ]]
+			if [[ $__nerdline_tmp_parseColors_color =~ ^#([A-Fa-f0-9]{3})$ ]]
 			then #Expand short value
-				__nerdline_tmp_parseColors_color_="#${__nerdline_tmp_parseColors_color:1:1}${__nerdline_tmp_parseColors_color:1:1}"
-				__nerdline_tmp_parseColors_color_+="${__nerdline_tmp_parseColors_color:2:1}${__nerdline_tmp_parseColors_color:2:1}"
-				__nerdline_tmp_parseColors_color_+="${__nerdline_tmp_parseColors_color:3:1}${__nerdline_tmp_parseColors_color:3:1}"
-				__nerdline_tmp_parseColors_color="$__nerdline_tmp_parseColors_color_"
+				local r="${__nerdline_tmp_parseColors_color:1:1}"
+				local g="${__nerdline_tmp_parseColors_color:2:1}"
+				local b="${__nerdline_tmp_parseColors_color:3:1}"
+				__nerdline_tmp_parseColors_color="#${r}${r}${g}${g}${b}${b}"
 			elif [[ $__nerdline_tmp_parseColors_color =~ ^#[A-Fa-f0-9]{8}$ ]]
 			then #Delete alpha from color
 				__nerdline_tmp_parseColors_color="${__nerdline_tmp_parseColors_color:0:7}"
@@ -116,9 +117,9 @@ colors)
 				__nerdline_tmp_parseColors_eval="$((16#${__nerdline_tmp_parseColors_color:1:2}))"
 				__nerdline_tmp_parseColors_eval+=":$((16#${__nerdline_tmp_parseColors_color:3:2}))"
 				__nerdline_tmp_parseColors_eval+=":$((16#${__nerdline_tmp_parseColors_color:5:2}))"
-				eval "${__nerdline_tmp_parseColors_valname}"="${__nerdline_tmp_parseColors_eval}"
+				printf -v "$__nerdline_tmp_parseColors_valname" '%s' "$__nerdline_tmp_parseColors_eval"
 			else #From decimal digits
-				eval "${__nerdline_tmp_parseColors_valname}"="${__nerdline_tmp_parseColors_color//,/:}"
+				printf -v "$__nerdline_tmp_parseColors_valname" '%s' "${__nerdline_tmp_parseColors_color//,/:}"
 			fi
 		done
 		return 0
@@ -177,7 +178,7 @@ config)
 				__nerdline_tmp_valname+="${__nerdline_tmp_cfg_section,,}_"
 			fi
 			__nerdline_tmp_valname+="${__nerdline_tmp_cfg_key//./_}"
-			eval "${__nerdline_tmp_valname}"="\"${__nerdline_tmp_cfg_val}\""
+			printf -v "$__nerdline_tmp_valname" '%s' "$__nerdline_tmp_cfg_val"
 		done < "$__nerdline_tmp_cfg_file"
 	}
 	;;

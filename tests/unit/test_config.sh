@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# shellcheck disable=SC1091,SC2001,SC2154
+# shellcheck disable=SC1091,SC2001,SC2016,SC2154
 
 __nerdline_pfx="/home/erfea/Projects/nerdline"
 

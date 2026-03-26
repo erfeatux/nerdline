@@ -163,10 +163,11 @@ then #Sourcing this file #########################################
 	echo -ne '\e]11;?\a'
 	while [[ -z $__nerdline_tmp_bg ]]
 	do
-		IFS=':' read -r -t 0.05 -d $'\a' x __nerdline_tmp_bg
+		IFS=':' read -r -t 1 -d $'\a' x __nerdline_tmp_bg || break
 	done
 	echo "$x" >/dev/null 2>&1; unset x
 	stty echo >/dev/null 2>&1
+	__nerdline_tmp_bg="${__nerdline_tmp_bg:-0:0:0}"
 	IFS='/' read -ra __nerdline_tmp_c <<< "$__nerdline_tmp_bg"
 	export __nerdline_term_bg="$(($((16#"${__nerdline_tmp_c[0]}"))/256)):$(($((16#"${__nerdline_tmp_c[1]}"))/256)):$(($((16#"${__nerdline_tmp_c[2]}"))/256))"
 
