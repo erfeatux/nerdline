@@ -22,20 +22,20 @@ error-sourcing)
 	{ #Return the specified error code and print message
 		if [[ $# -eq 0 ]] || [[ $# -gt 2 ]]
 		then
-			echo -e "\e[31;40mInvalid function 'error' call ($# args)\e[0;m"
+			echo -e "\e[31;40mInvalid function 'error' call ($# args)\e[0m"
 			return 254
 		fi
 		if [[ ! $1 =~ ^[0-9]+$ ]] || [[ $1 -lt 1 ]] || [[ $1 -gt 253 ]]
 		then
-			echo -e "\e[31;40mInvalid function 'error' call ($1 - invalid error code)\e[0;m"
+			echo -e "\e[31;40mInvalid function 'error' call ($1 - invalid error code)\e[0m"
 			return 254
 		fi
 	
 		if [[ $# -eq 1 ]] || [[ -z "$2" ]]
 		then
-			echo -e "\e[31;40mError code: $1\e[0;m"
+			echo -e "\e[31;40mError code: $1\e[0m"
 		else
-			echo -e "\e[31;40m$2\e[0;m\nError code: $1"
+			echo -e "\e[31;40m$2\e[0m\nError code: $1"
 		fi
 	
 		unset error
@@ -49,20 +49,20 @@ error)
 	{ #Exits with the specified error code and print message
 		if [[ $# -eq 0 ]] || [[ $# -gt 2 ]]
 		then
-			echo -e "\e[31;40mInvalid function 'error' call ($# args)\e[0;m"
+			echo -e "\e[31;40mInvalid function 'error' call ($# args)\e[0m"
 			exit 254
 		fi
 		if [[ ! $1 =~ ^[0-9]+$ ]] || [[ $1 -lt 1 ]] || [[ $1 -gt 253 ]]
 		then
-			echo -e "\e[31;40mInvalid function 'error' call ($1 - invalid error code)\e[0;m"
+			echo -e "\e[31;40mInvalid function 'error' call ($1 - invalid error code)\e[0m"
 			exit 254
 		fi
 	
 		if [[ $# -eq 1 ]] || [[ -z "$2" ]]
 		then
-			echo -e "\e[31;40mError code: $1\e[0;m"
+			echo -e "\e[31;40mError code: $1\e[0m"
 		else
-			echo -e "\e[31;40m$2\e[0;m"
+			echo -e "\e[31;40m$2\e[0m"
 		fi
 	
 		exit "$1"
@@ -130,16 +130,16 @@ colors)
 config)
 	function __nerdline_tmp_load_config()
 	{
-		__nerdline_tmp_cfg_file="$1"
+		local __nerdline_tmp_cfg_file="$1"
 		#############################
-		# __nerdline_tmp_cfg_pfx="$2"
+		# local __nerdline_tmp_cfg_pfx="$2"
 	
-		if [[ ! -r $__nerdline_tmp_cfg_file ]]
+		if [[ ! -r "$__nerdline_tmp_cfg_file" ]]
 		then
 			error 10 "Can't read config file '$__nerdline_tmp_cfg_file'";return $?
 		fi
 	
-		__nerdline_tmp_cfg_section=
+		local __nerdline_tmp_cfg_section=
 		while read -r __nerdline_tmp_line
 		do
 			if [[ -z "$__nerdline_tmp_line" ]] || [[ "$__nerdline_tmp_line" =~ ^\s*# ]]
@@ -149,17 +149,23 @@ config)
 	
 			if [[ $__nerdline_tmp_line =~ ^\[.*\]$ ]]
 			then #Defined section
-				__nerdline_tmp_cfg_section="$(echo "${__nerdline_tmp_line:1:-1}" | sed -e 's/\(^\s*\|\s*$\)//g')"
+				local __nerdline_tmp_cfg_section_raw="${__nerdline_tmp_line:1:-1}"
+				__nerdline_tmp_cfg_section="${__nerdline_tmp_cfg_section_raw#"${__nerdline_tmp_cfg_section_raw%%[![:space:]]*}"}"
+				__nerdline_tmp_cfg_section="${__nerdline_tmp_cfg_section%"${__nerdline_tmp_cfg_section##*[![:space:]]}"}"
 				continue
 			fi
 	
 			#else try parse entry
-			__nerdline_tmp_cfg_key="$(echo "${__nerdline_tmp_line%%=*}" | sed -e 's/\(^\s*\|\s*$\)//g')"
-			__nerdline_tmp_cfg_val="$(echo "${__nerdline_tmp_line#*=}" | sed -e 's/\(^\s*\|\s*$\)//g')"
+			local __nerdline_tmp_cfg_key_raw="${__nerdline_tmp_line%%=*}"
+			local __nerdline_tmp_cfg_val_raw="${__nerdline_tmp_line#*=}"
+			local __nerdline_tmp_cfg_key="${__nerdline_tmp_cfg_key_raw#"${__nerdline_tmp_cfg_key_raw%%[![:space:]]*}"}"
+			__nerdline_tmp_cfg_key="${__nerdline_tmp_cfg_key%"${__nerdline_tmp_cfg_key##*[![:space:]]}"}"
+			local __nerdline_tmp_cfg_val="${__nerdline_tmp_cfg_val_raw#"${__nerdline_tmp_cfg_val_raw%%[![:space:]]*}"}"
+			__nerdline_tmp_cfg_val="${__nerdline_tmp_cfg_val%"${__nerdline_tmp_cfg_val##*[![:space:]]}"}"
 			if [[ ${#__nerdline_tmp_cfg_val} -ge 2 ]];
 			then
-				__nerdline__q1="${__nerdline_tmp_cfg_val:0:1}"
-				__nerdline__q2="${__nerdline_tmp_cfg_val: -1}"
+				local __nerdline__q1="${__nerdline_tmp_cfg_val:0:1}"
+				local __nerdline__q2="${__nerdline_tmp_cfg_val: -1}"
 				if [[ "$__nerdline__q1" == "$__nerdline__q2" && ( "$__nerdline__q1" == '"' || "$__nerdline__q1" == "'" ) ]]
 				then
 					__nerdline_tmp_cfg_val="${__nerdline_tmp_cfg_val:1:-1}"
@@ -172,7 +178,7 @@ config)
 			fi
 	
 			#make bash value from parsed entry
-			__nerdline_tmp_valname="__nerdline_"
+			local __nerdline_tmp_valname="__nerdline_"
 			if [[ ${__nerdline_tmp_cfg_section,,} != nerdline ]]
 			then
 				__nerdline_tmp_valname+="${__nerdline_tmp_cfg_section,,}_"

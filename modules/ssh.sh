@@ -89,12 +89,17 @@ then #Start ssh connection #######################################
 	__nerdline_tmp_valnames=()
 	for __nerdline_tmp_segment in ${__nerdline_segments}
 	do
-		eval __nerdline_tmp_valnames+='( "${!__nerdline_'"$__nerdline_tmp_segment"'_@}" )'
+		# Get all matching variable names using compgen (safer than eval)
+		while IFS= read -r __nerdline_tmp_varname; do
+			[[ -n $__nerdline_tmp_varname ]] && __nerdline_tmp_valnames+=("$__nerdline_tmp_varname")
+		done < <(compgen -v | grep "^__nerdline_${__nerdline_tmp_segment}_")
 	done
 	__nerdline_tmp_values=()
 	for __nerdline_tmp_valname in "${__nerdline_tmp_valnames[@]}"
 	do
-		eval __nerdline_tmp_values+='( "'"$__nerdline_tmp_valname"'=\"${!__nerdline_tmp_valname}\"" )'
+		# Use indirect parameter expansion instead of eval
+		__nerdline_tmp_val_val="${!__nerdline_tmp_valname}"
+		__nerdline_tmp_values+=("${__nerdline_tmp_valname}=${__nerdline_tmp_val_val}")
 	done
 	__nerdline_tmp_values+=( "__nerdline_modules_ssh=\"${__nerdline_modules}\"" )
 	__nerdline_tmp_values+=( "__nerdline_segments_ssh=\"${__nerdline_segments}\"" )
