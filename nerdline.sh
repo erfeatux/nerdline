@@ -97,10 +97,6 @@ then #Test (use it before sourcing file) #########################
 	then
 		error 2 'Not truecolor terminal'
 	fi
-	if [[ ${TERM} =~ screen.* ]] || [[ -n ${STY} ]] || [[ -n ${TMUX} ]]
-	then
-		error 3 'Not for screen and tmux'
-	fi
 
 	#set modules received over ssh
 	if [[ -z ${__nerdline_modules} ]] && [[ -n ${__nerdline_modules_ssh} ]]

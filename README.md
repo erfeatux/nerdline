@@ -29,17 +29,20 @@ Clone the repository:
 ```bash
 git clone https://github.com/erfeatux/nerdline.git ~/.local/share/nerdline
 ```
-Add to `~/.bash.rc`
-```
-if [[ -z $__nerdline_pfx ]]
+
+Add to `~/.bashrc` (for tmux/screen compatibility use `type -t` check instead of variable):
+```bash
+if [[ $(type -t __nerdline_update) != function ]] && [[ -z $STY ]]
 then
   ~/.local/share/nerdline/nerdline.sh test && source ~/.local/share/nerdline/nerdline.sh
 fi
 ```
-After install to run immediately
+
+After install to run immediately:
 ```bash
 ~/.local/share/nerdline/nerdline.sh test && source ~/.local/share/nerdline/nerdline.sh
 ```
+
 ## 🔧 Configuration
 
 ⚠️ **Note:** to properly display the special symbols from the default config, your terminal must use a font from [Nerd Fonts](https://www.nerdfonts.com/).
