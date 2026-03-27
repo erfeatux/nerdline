@@ -20,7 +20,8 @@ All segments are implemented in **pure Bash** — no external dependencies requi
 ### Supported modules:
 Modules extend the functionality of nerdline.
 - 🔑 **ssh** — when connecting to a remote host via SSH, nerdline automatically deploys itself to that host and starts
-- 🔒 **sudo** — when running `sudo su`, nerdline is automatically launched for the elevated session  
+- 🔒 **sudo** — when running `sudo su`, nerdline is automatically launched for the elevated session
+- 🖥️ **win_title** — sets terminal window title using OSC 2 escape sequences, showing current command and context  
 
 ## 📦 Installation
 
@@ -55,7 +56,7 @@ Example:
 ```ini
 [nerdline]
 segments=user hostname python hist git pwd jobs retcode
-modules=ssh sudo
+modules=ssh sudo win_title
 separator=' '
 separator_same_bg='░ '
 
@@ -123,5 +124,29 @@ color_err=170:0:0
 color_fg=0:170:0
 sign_err=󱎘
 sign_ok=󰸞
+
+[win_title]
+# Window title format (default: %USER@%HOSTSHORT: %CMD)
+# Available placeholders:
+#   %CMD        - current command
+#   %ARGS       - command arguments only
+#   %BASECMD    - command name without path
+#   %PWD        - current directory (with ~ for home if short_pwd=true)
+#   %BASEPWD    - current directory name (~ if home and short_pwd=true)
+#   %HOME       - home directory with tilde
+#   %USER       - current username
+#   %HOSTNAME   - full hostname
+#   %HOSTSHORT  - hostname without domain
+#   %SHELLNAME  - shell name (bash/zsh/fish)
+#   %SHELLVERSION - shell version
+#   %TIME       - current time (HH:MM:SS)
+#   %DATE       - current date (YYYY-MM-DD)
+#   %JOBS       - number of background jobs
+#   %EXITCODE   - last command exit code
+format=%USER@%HOSTSHORT: %CMD
+
+# Shorten home directory to ~ in PWD placeholder (default: true)
+# Set to false to show full path
+short_pwd=true
 ```
 ⚠️ **Note:** use command `nerdline update` to reload config

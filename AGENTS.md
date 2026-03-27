@@ -8,7 +8,7 @@ nerdline is a pure Bash powerline-style prompt generator with no external depend
 - **nerdline.sh** - Main entry point
 - **lib/functions.sh** - Shared utilities (error, colors, config)
 - **segments/** - Prompt segments (git, python, user, hostname, etc.)
-- **modules/** - Optional extensions (ssh, sudo)
+- **modules/** - Optional extensions (ssh, sudo, win_title)
 
 ## Build, Lint, and Test Commands
 
@@ -24,6 +24,9 @@ nerdline is a pure Bash powerline-style prompt generator with no external depend
 
 # Test a single module (e.g., ssh)
 ./modules/ssh.sh test
+
+# Test a single module (e.g., win_title)
+./modules/win_title.sh test
 
 # Reload configuration after changes
 nerdline update
@@ -165,6 +168,51 @@ fi
 ## File Structure for Modules
 
 Similar to segments, may include additional actions (e.g., `connect` for SSH).
+
+### win_title Module
+
+The `win_title` module sets the terminal window title using OSC 2 escape sequences.
+
+**Actions:**
+- `test` - Configuration validation
+- `run [cmd]` - Set window title for given command or BASH_COMMAND
+
+**Features:**
+- Uses DEBUG trap to capture commands before execution
+- Sets title immediately when command is entered
+- Supports customizable format with placeholders
+- Shows shell name when no command has been executed yet
+
+**Configuration:**
+- `__nerdline_win_title_enabled` - Enable/disable (default: 1)
+- `__nerdline_win_title_format` - Format string with placeholders
+
+**Placeholders:**
+| Placeholder | Description |
+|------------|-------------|
+| `%CMD` | Current command |
+| `%ARGS` | Command arguments only |
+| `%BASECMD` | Command basename (without path) |
+| `%PWD` | Full directory path |
+| `%BASEPWD` | Directory name only |
+| `%HOME` | Home directory with tilde |
+| `%SHORTPWD` | Path with tilde for home |
+| `%USER` | Username |
+| `%HOSTNAME` | Full hostname |
+| `%HOSTSHORT` | Hostname without domain |
+| `%SHELLNAME` | Shell name (bash/zsh/fish) |
+| `%SHELLVERSION` | Shell version |
+| `%TIME` | Current time (HH:MM:SS) |
+| `%DATE` | Current date (YYYY-MM-DD) |
+| `%JOBS` | Background jobs count |
+| `%EXITCODE` | Last command exit code |
+
+**Default format:** `%USER@%HOSTSHORT: %CMD`
+
+**Behavior:**
+- When terminal opens (no command yet): shows shell name (e.g., `bash`)
+- When entering a command: title is set immediately to the command
+- After command completes: title remains as the executed command
 
 ## File Structure for Tests
 

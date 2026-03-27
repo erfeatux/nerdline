@@ -186,6 +186,12 @@ config)
 			__nerdline_tmp_valname+="${__nerdline_tmp_cfg_key//./_}"
 			printf -v "$__nerdline_tmp_valname" '%s' "$__nerdline_tmp_cfg_val"
 		done < "$__nerdline_tmp_cfg_file"
+
+		# Default short_pwd to true if not set in any section
+		if [[ -z ${__nerdline_win_title_short_pwd:-} ]]
+		then
+			__nerdline_win_title_short_pwd=true
+		fi
 	}
 	;;
 
