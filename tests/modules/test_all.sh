@@ -48,7 +48,7 @@ function test_module()
 
 __nerdline_test_init
 
-for module in ssh sudo win_title; do
+for module in ssh sudo win_title custom; do
 	test_module "$module"
 done
 

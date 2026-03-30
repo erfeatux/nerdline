@@ -184,7 +184,17 @@ config)
 				__nerdline_tmp_valname+="${__nerdline_tmp_cfg_section,,}_"
 			fi
 			__nerdline_tmp_valname+="${__nerdline_tmp_cfg_key//./_}"
-			printf -v "$__nerdline_tmp_valname" '%s' "$__nerdline_tmp_cfg_val"
+			# Support multiple values with same key (append with ¶) for specific multi-value keys
+			# These keys are intentionally multi-value: keybind
+			local __nerdline_tmp_is_multi=false
+			case "$__nerdline_tmp_valname" in
+				*_keybind) __nerdline_tmp_is_multi=true ;;
+			esac
+			if [[ "$__nerdline_tmp_is_multi" == true ]] && [[ -n "${!__nerdline_tmp_valname}" ]]; then
+				printf -v "$__nerdline_tmp_valname" '%s' "${!__nerdline_tmp_valname}¶$__nerdline_tmp_cfg_val"
+			else
+				printf -v "$__nerdline_tmp_valname" '%s' "$__nerdline_tmp_cfg_val"
+			fi
 		done < "$__nerdline_tmp_cfg_file"
 
 		# Default short_pwd to true if not set in any section
